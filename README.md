@@ -234,3 +234,113 @@ public class WalkingMovement : MonoBehaviour
     }
 }
 ```
+Then create a method for moving to the shortest queue:
+```c#
+public class WalkingMovement : MonoBehaviour
+{
+   // previous code
+   
+   void GoToQueue()
+    {
+        goesToQueue = true;
+
+        if (ChiesaQueueBar.Instance.timeLeft < 20 && transform.position.x <= 0)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetChiesa, speed * Time.deltaTime);
+            spriteRenderer.flipX = false;
+
+
+        } else if (ChiesaQueueBar.Instance.timeLeft < 20 && transform.position.x >= 0)
+        {
+
+            transform.position = Vector3.MoveTowards(transform.position, targetChiesa, speed * Time.deltaTime);
+            spriteRenderer.flipX = true;
+        }
+        else if (CiboQueueBar.Instance.timeLeft < 20 && transform.position.x <= -7)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetCibo, speed * Time.deltaTime);
+            spriteRenderer.flipX = false;
+
+
+        }
+        else if (CiboQueueBar.Instance.timeLeft < 20 && transform.position.x >= -7)
+        {
+
+            transform.position = Vector3.MoveTowards(transform.position, targetCibo, speed * Time.deltaTime);
+            spriteRenderer.flipX = true;
+        }
+        else if (TowerQueueBar.Instance.timeLeft < 20 && transform.position.x <= 7)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetTower, speed * Time.deltaTime);
+            spriteRenderer.flipX = false;
+
+
+        }
+        else if (TowerQueueBar.Instance.timeLeft < 20 && transform.position.x >= 7)
+        {
+
+            transform.position = Vector3.MoveTowards(transform.position, targetTower, speed * Time.deltaTime);
+            spriteRenderer.flipX = true;
+        }
+
+    }
+}
+```
+When the walking guy reaches the queue, he should stop walking and stay still. Write a method for that as well:
+```c#
+public class WalkingMovement : MonoBehaviour
+{
+   // previous code
+   
+   void ChangeAnim()
+    {
+        if(transform.position == targetChiesa || transform.position == targetCibo || transform.position == targetTower)
+        {
+            animator.Play("Idle");
+        } else
+        {
+            animator.Play("WalkingAnim");
+        }
+    }
+}
+```
+And finally put everything into the `Update`:
+```c#
+public class WalkingMovement : MonoBehaviour
+{
+   // previous code
+   
+  void Update()
+    {
+        ChangeAnim();
+        if (ChiesaQueueBar.Instance.timeLeft > 20 && CiboQueueBar.Instance.timeLeft > 20 && TowerQueueBar.Instance.timeLeft > 20)
+        {
+            goesToQueue = false;
+            //return to normal size
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -2.83f, transform.position.z), speed *            Time.deltaTime);
+            if (turn)
+            {
+                MoveRight();
+            }
+            if (!turn)
+            {
+                MoveLeft();
+            }
+        } else
+        {
+            GoToQueue();
+        }
+       
+        if(transform.position.x >= 10f)
+        {
+            turn = false;
+            spriteRenderer.flipX = true;
+        }
+        if (transform.position.x <= -10f)
+        {
+            turn = true;
+            spriteRenderer.flipX = false;
+        }
+    }
+}
+```
