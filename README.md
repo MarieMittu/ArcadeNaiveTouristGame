@@ -173,4 +173,64 @@ public class MoveRight : MonoBehaviour
     }
 }
 ```
+## The Code Snippet: Behaviour of the Walking Guy
+Every time a queue becomes smaller, the walking tourist immediately moves there.
 
+https://user-images.githubusercontent.com/92306135/214857400-eb7d79cd-097a-4704-80ad-59e7fe5ff205.mp4
+
+How to write this logic in a script?
+Declare variables: bools, animator, positions, etc.
+```c#
+public class WalkingMovement : MonoBehaviour
+{
+    private Animator animator;
+
+    public float speed = 5f;
+    bool turn = true;
+    private SpriteRenderer spriteRenderer;
+
+    public Vector3 targetChiesa;
+    public Vector3 targetCibo;
+    public Vector3 targetTower;
+
+    bool goesToQueue = false;
+
+    public bool isScaling;
+}
+```
+Get components:
+```c#
+public class WalkingMovement : MonoBehaviour
+{
+   // previous code
+   
+   private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        Debug.Log(transform.localScale + " SIZE");
+    }
+}
+```
+Define methods for the default walking left-right and vice versa, while the queues are all too long:
+```c#
+public class WalkingMovement : MonoBehaviour
+{
+   // previous code
+   
+   void MoveRight()
+    {
+        transform.Translate(speed * Time.deltaTime, 0, 0);
+    }
+
+    void MoveLeft()
+    {
+        transform.Translate(-speed * Time.deltaTime, 0, 0);
+    }
+}
+```
