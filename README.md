@@ -316,8 +316,7 @@ public class WalkingMovement : MonoBehaviour
         if (ChiesaQueueBar.Instance.timeLeft > 20 && CiboQueueBar.Instance.timeLeft > 20 && TowerQueueBar.Instance.timeLeft > 20)
         {
             goesToQueue = false;
-            //return to normal size
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -2.83f, transform.position.z), speed *            Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -2.83f, transform.position.z), speed * Time.deltaTime);
             if (turn)
             {
                 MoveRight();
